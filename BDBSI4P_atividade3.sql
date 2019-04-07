@@ -24,3 +24,7 @@ select departamento.nome_departamento, sum(empregado.salario) from departamento 
 select empregado.nome_completo from empregado where empregado.rg in ( select distinct departamento.rg_gerente from departamento where departamento.rg_gerente is not null);
 select empregado.nome_completo from empregado where empregado.rg in (select distinct historico_salario.rg from historico_salario where historico_salario.rg is not null);
 select empregado.nome_completo from empregado where empregado.rg not in (select distinct historico_salario.rg from historico_salario where historico_salario.rg is not null);
+select * from empregado where empregado.salario < (select avg(historico_salario.salario_mensal) from historico_salario);
+select * from empregado	where empregado.salario >= (select (min(historico_salario.salario_mensal) + 1000) from historico_salario) and empregado.salario  <= (select (avg(historico_salario.salario_mensal)+1000) from historico_salario);     
+select empregado.nome_completo, empregado_projeto.numero_projeto from empregado inner join empregado_projeto on (empregado_projeto.rg_empregado = empregado.rg) where empregado.rg in (select departamento.rg_gerente from departamento where departamento.rg_gerente is not null);
+select * from empregado where empregado.salario >= (select (avg(empregado.salario) - stddev(empregado.salario)) from empregado) and empregado.salario <= (select ( avg(empregado.salario) + stddev(empregado.salario)) from empregado );
